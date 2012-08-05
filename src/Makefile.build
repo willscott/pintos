@@ -33,6 +33,7 @@ devices_SRC += devices/partition.c	# Partition block device.
 devices_SRC += devices/ide.c		# IDE disk block device.
 devices_SRC += devices/input.c		# Serial and keyboard input.
 devices_SRC += devices/intq.c		# Interrupt queue.
+devices_SRC += devices/pci.c            # PCI devices.
 devices_SRC += devices/rtc.c		# Real-time clock.
 devices_SRC += devices/shutdown.c	# Reboot and power off.
 devices_SRC += devices/speaker.c	# PC speaker.

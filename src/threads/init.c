@@ -34,6 +34,7 @@
 #ifdef FILESYS
 #include "devices/block.h"
 #include "devices/ide.h"
+#include "devices/pci.h"
 #include "filesys/filesys.h"
 #include "filesys/fsutil.h"
 #endif
@@ -121,6 +122,9 @@ main (void)
   timer_calibrate ();
 
 #ifdef FILESYS
+  /* Initialize network. */
+  pci_init();
+
   /* Initialize file system. */
   ide_init ();
   locate_block_devices ();
