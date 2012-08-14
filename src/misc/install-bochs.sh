@@ -4,7 +4,9 @@ if which apt-get
 then
   sudo apt-get install build-essential libncurses5-dev subversion
 else
-  echo "not debian-based, support won't be auto installed."
+  echo "not debian-based, prerequisites won't be automatically installed."
+  echo "Make sure to install a working gcc, the ncurses headers, and"
+  echo "subversion if the compilation fails."
 fi
 
 mkdir bochs
