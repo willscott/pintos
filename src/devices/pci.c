@@ -1,4 +1,5 @@
 #include "devices/pci.h"
+#include "devices/e100.h"
 #include "devices/pcireg.h"
 #include <ctype.h>
 #include <debug.h>
@@ -33,7 +34,8 @@ struct pci_driver pci_attach_class[] = {
 };
 
 struct pci_driver pci_attach_vendor[] = {
-//	{ E100_VENDORID, E100_DEVICEID, &pci_e100_attach },
+	{ E100_VENDORID, E100_QEMU_DEVICEID, &pci_e100_attach },
+	{ E100_VENDORID, E100_BOCHS_DEVICEID, &pci_e100_attach },
 	{ 0, 0, 0 },
 };
 
