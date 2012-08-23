@@ -7,8 +7,8 @@
 #define E100_QEMU_DEVICEID 0x1209
 #define E100_BOCHS_DEVICEID 0x100e
 
-#define E100_RX_RING_SIZE = 0x100
-#define E100_TX_RING_SIZE = 0x100
+#define E100_RX_RING_SIZE 0x100
+#define E100_TX_RING_SIZE 0x100
 
 int pci_e100_attach(struct pci_func *pcif);
 
@@ -37,6 +37,22 @@ struct e100_cb {
   uint32_t          address;
 };
 
+// Command Block masks.
+enum e100_cb_status_mask {
+  E100_CB_STATUS_C =  0x8000,
+  E100_CB_STATUS_OK = 0x2000,
+  E100_CB_STATUS_U =  0x1000
+};
+enum e100_cb_cmd_mask {
+  E100_CB_CMD_EL =  0x8000,
+  E100_CB_CMD_S =   0x4000,
+  E100_CB_CMD_I =   0x2000,
+  E100_CB_CMD_CID = 0x1F00,
+  E100_CB_CMD_NC =  0x0010,
+  E100_CB_CMD_SF =  0x0008,
+  E100_CB_CMD_CMD = 0x0007
+};
+
 // Transmit Buffer Descriptor.
 struct e100_tbd {
   uint32_t          address;
@@ -47,7 +63,7 @@ struct e100_tbd {
 // Transmit command block.
 struct e100_tcb {
   struct e100_cb    cb;
-  struct e100_tbd*  tbd;
+  uint32_t          data_addr;
   uint16_t          size;
   uint8_t           threshold;
   uint8_t           tbd_count;
