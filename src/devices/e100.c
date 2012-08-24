@@ -22,6 +22,7 @@ void pci_e100_init(void *csr)
 {
   size_t i;
   struct e100_tcb* tx_loc;
+  struct e100_rfd* rx_loc;
 
   struct e100_csr* e100 = (struct e100_csr*)csr;
   // Software reset.  Takes up to 10us to complete
@@ -47,4 +48,16 @@ void pci_e100_init(void *csr)
   outw((uint16_t)&e100->scb_cmd, 0x10);
   
   printf("E100: Initializing Receive Buffer.\n");
+  size_t rx_frame = sizeof(struct e100_rfd) + NET_MTU;
+  size_t rx_size = E100_RX_RING_SIZE * rx_frame;
+  rx_loc = malloc(rx_size);
+  for (i = 0; i < E100_RX_RING_SIZE; i++) {
+    struct e100_rfd* hdr = rx_loc + i * rx_frame;
+    hdr->cb.cmd = 0;
+    hdr->cb.address = rx_frame * ((i + 1) % E100_RX_RING_SIZE);
+    hdr->size = NET_MTU;
+  }
+  // Notify the device of the rx buffer.
+  outl((uint16_t)&e100->scb_ptr, rx_loc);
+  outw((uint16_t)&e100->scb_cmd, 0x1);
 }

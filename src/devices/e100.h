@@ -7,8 +7,9 @@
 #define E100_QEMU_DEVICEID 0x1209
 #define E100_BOCHS_DEVICEID 0x100e
 
-#define E100_RX_RING_SIZE 0x100
-#define E100_TX_RING_SIZE 0x100
+// TODO(willscott): increase to 0x100 once paging allow.
+#define E100_RX_RING_SIZE 0x40
+#define E100_TX_RING_SIZE 0x40
 
 int pci_e100_attach(struct pci_func *pcif);
 
