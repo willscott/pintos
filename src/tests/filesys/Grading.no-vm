@@ -8,7 +8,10 @@
 # 65% for extended file system features.
 30%	tests/filesys/extended/Rubric.functionality
 15%	tests/filesys/extended/Rubric.robustness
-20%	tests/filesys/extended/Rubric.persistence
+10%	tests/filesys/extended/Rubric.persistence
+
+# n% for Network support.
+10%	tests/filesys/net/Rubric
 
 # 20% to not break the provided file system features.
 20%	tests/filesys/base/Rubric

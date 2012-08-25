@@ -1,0 +1,9 @@
+# -*- makefile -*-
+
+tests/filesys/net_TESTS = $(addprefix tests/filesys/net/,net-echo)
+tests/filesys/net_PROGS = $(tests/filesys/net_TESTS)
+
+$(foreach prog,$(tests/filesys/net_TESTS),			\
+	$(eval $(prog)_SRC += $(prog).c tests/lib.c tests/main.c))
+
+tests/filesys/net-echo.output: TIMEOUT=300
