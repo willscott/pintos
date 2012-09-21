@@ -1,9 +1,10 @@
 @c Local settings
 
-@set coursenumber CS 140
+@set coursenumber CSE 451
 @set localpintostarpath /usr/class/cs140/pintos/pintos.tar.gz
 @set localpintoshttppath http://@/www.stanford.edu/@/class/@/cs140/@/pintos/@/pintos.@/tar.gz
 @set localpintosbindir /usr/class/cs140/`uname -m`/bin
+@set courseserver forkbomb.cs.washington.edu
 
 @set recommendvnc
 @clear recommendcygwin

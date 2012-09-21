@@ -42,40 +42,63 @@ projects.
 @node Getting Started
 @section Getting Started
 
-To get started, you'll have to log into a machine that Pintos can be
-built on.  
-@localmachines{}
-We will test your code on these machines, and the instructions given
-here assume this environment.  We cannot provide support for installing
-and working on Pintos on your own machine, but we provide instructions
-for doing so nonetheless (@pxref{Installing Pintos}).
+For @value{coursenumber} we will provide you with a Linux virtual machine image for development and testing of Pintos. We will test your code in this same VM environment. Our instructions will assume this environment.
 
-Once you've logged into one of these machines, either locally or
-remotely, start out by adding our binaries directory to your @env{PATH}
-environment.  
-@localpathsetup{}
+You can run this VM image in any VM player. You may choose to run your image on your own computer or on the instructional machines. @value{courseserver} is reserved for CSE 451.
+
+It is perfectly possible to work on Pintos on your own machine, though we cannot reasonably support you in doing so. Nevertheless, we provide instructions to help if this is the path you choose (@pxref{Installing Pintos}).
 
 @menu
+* Obtaining Pintos::
+* Setting up the Environment::
 * Source Tree Overview::        
-* Building Pintos::             
-* Running Pintos::              
+* Building and Running Pintos for the First Time::
 * Debugging versus Testing::    
 @end menu
+
+@node Obtaining Pintos
+@subsection Obtaining Pintos
+
+Obtain the source for Pintos using Git. Git should come pre-installed in your VM. Use the command:
+@example
+git clone https://github.com/willscott/pintos.git ~/pintos
+@end example
+
+This will copy the latest version of the project into a directory called @file{pintos} in the home directory of your VM.
+
+You'll need to do a couple things more things in your VM before you're able to work on Pintos. 
+
+@node Setting up the Environment
+@subsection Building Bochs
+
+It is unfortunately necessary to build Bochs with a few custom flags in order to support the debugging features you'll want to use throughout this project. Fortunately, we have a script that will build it for you. Issue the following commands:
+@example
+cd ~/pintos/src/misc
+sh install-bochs.sh
+@end example
+
+This will invoke a series of actions to build and install Bochs. When it has completed, type @command{bochs --version} to check that Bochs was successfully installed.
+
+@subsection Setting up your Path
+
+You'll need to add a number of Pintos utilities to your path. In order to do so, run the following commands:
+@example
+export PATH=$PATH:~/pintos/src/utils/
+@end example
+
+Test that your path now includes the Pintos binary by issuing the command @command{which pintos}. If it says @command{pintos not found} then it hasn't been properly included in your path. If it tells you where the pintos binary is, then it is.
+
+Now edit the file @file{~/.profile} and add the line:
+@example
+export PATH=$PATH:~/pintos/src/utils/
+@end example
+
+This will cause your path to be set every time you start a shell, allowing you to never have to type that command ever again. If you don't edit your @file{~/.profile}, you'll have to manually issue the command each time you open a new shell.
 
 @node Source Tree Overview
 @subsection Source Tree Overview
 
-Now you can extract the source for Pintos into a directory named
-@file{pintos/src}, by executing
-@example
-zcat @value{localpintostarpath} | tar x
-@end example
-Alternatively, fetch
-@uref{@value{localpintoshttppath}}
-and extract it in a similar way.
-
-Let's take a look at what's inside.  Here's the directory structure
-that you should see in @file{pintos/src}:
+Let's take a look at what's inside.  Here's the directory structure that you should see in @file{pintos/src}:
 
 @table @file
 @item threads/
@@ -134,17 +157,84 @@ These files may come in handy if you decide to try working with Pintos
 on your own machine.  Otherwise, you can ignore them.
 @end table
 
-@node Building Pintos
+@node Building and Running Pintos for the First Time
 @subsection Building Pintos
 
-As the next step, build the source code supplied for
-the first project.  First, @command{cd} into the @file{threads}
+Here we'll show you how to compile and run Pintos. Pintos comes
+with quite a bit of basic functionality included and is capable of
+being compiled straight out of the box. You'll add a lot to it
+in the coming weeks of the quarter, but for now let's just compile
+the base code and make sure we can get it to run.
+
+First, @command{cd} into the @file{/pintos/src/threads}
 directory.  Then, issue the @samp{make} command.  This will create a
 @file{build} directory under @file{threads}, populate it with a
 @file{Makefile} and a few subdirectories, and then build the kernel
 inside.  The entire build should take less than 30 seconds.
 
-@localcrossbuild{}
+@subsection Running Pintos
+
+One of the programs you included in your path earlier is an executable
+called @command{pintos}. This program conveniently starts Pintos
+in a simulator.
+
+You can invoke @command{pintos} as 
+@code{pintos @var{argument}@dots{}}. Each
+@var{argument} is passed to the Pintos kernel for it to act on.
+
+Try it out.  First @command{cd} into the newly created @file{build}
+directory.  Then issue the command 
+
+@example
+pintos -v -- run alarm-multiple
+@end example
+
+which passes the arguments @code{run alarm-multiple} to the Pintos
+kernel. In these arguments, everything after @code{--} in the command
+is passed to the Pintos kernel. Here, @command{run} instructs the 
+kernel to run a test and @code{alarm-multiple} is the test to run.
+Try replacing @code{run alarm-multiple} with  @code{run alarm-single}.
+Bochs should run the alarm-single test instead of the alarm-multiple
+test and output some similar (shorter) text. @code{alarm-single} and
+@code{alarm-multiple} are two examples of tests against which 
+you will test your version of Pintos throughout the quarter, and
+against which we will test your code to check that it works as 
+intended.
+
+The command @code{pintos} creates a @file{bochsrc.txt} file, 
+which is needed for
+running Bochs, and then invoke Bochs.  Bochs opens a new window that
+represents the simulated machine's display, and a BIOS message briefly
+flashes.  Then Pintos boots and runs the @code{alarm-multiple} test
+program, which outputs a few screenfuls of text.  
+
+You can log serial output to a file by redirecting at the
+command line, e.g.@: @code{pintos run alarm-multiple > logfile}.
+
+The @command{pintos} program offers several options for configuring the
+simulator or the virtual hardware.  If you specify any options, they
+must precede the commands passed to the Pintos kernel and be separated
+from them by @option{--}, so that the whole command looks like
+@code{pintos @var{option}@dots{} -- @var{argument}@dots{}}.  Invoke
+@code{pintos} without any arguments to see a list of available options. In the example above, you used the option @code{-v}, which turns off VGA output. Try removing it and seeing the difference.
+
+We have found in testing that VGA output is resource intensive 
+and can be crashy and slow. Your mileage may vary, so try the various output options described below.
+
+Options can select a simulator to use: the default is Bochs, but
+@option{--qemu} selects QEMU.  You can run the simulator
+with a debugger (@pxref{GDB}).  You can set the amount of memory to give
+the VM.  Finally, you can select how you want VM output to be displayed:
+use @option{-v} to turn off the VGA display, @option{-t} to use your
+terminal window as the VGA display instead of opening a new window
+(Bochs only), or @option{-s} to suppress serial input from @code{stdin}
+and output to @code{stdout}.
+
+The Pintos kernel has commands and options other than @command{run}.
+These are not very interesting for now, but you can see a list of them
+using @option{-h}, e.g.@: @code{pintos -h}.
+
+@subsection What "make" makes for you
 
 Following the build, the following are the interesting files in the
 @file{build} directory:
@@ -179,63 +269,6 @@ dependency files (@file{.d}), both produced by the compiler.  The
 dependency files tell @command{make} which source files need to be
 recompiled when other source or header files are changed.
 
-@node Running Pintos
-@subsection Running Pintos
-
-We've supplied a program for conveniently running Pintos in a simulator,
-called @command{pintos}.  In the simplest case, you can invoke
-@command{pintos} as @code{pintos @var{argument}@dots{}}.  Each
-@var{argument} is passed to the Pintos kernel for it to act on.
-
-Try it out.  First @command{cd} into the newly created @file{build}
-directory.  Then issue the command @code{pintos run alarm-multiple},
-which passes the arguments @code{run alarm-multiple} to the Pintos
-kernel.  In these arguments, @command{run} instructs the kernel to run a
-test and @code{alarm-multiple} is the test to run.
-
-This command creates a @file{bochsrc.txt} file, which is needed for
-running Bochs, and then invoke Bochs.  Bochs opens a new window that
-represents the simulated machine's display, and a BIOS message briefly
-flashes.  Then Pintos boots and runs the @code{alarm-multiple} test
-program, which outputs a few screenfuls of text.  When it's done, you
-can close Bochs by clicking on the ``Power'' button in the window's top
-right corner, or rerun the whole process by clicking on the ``Reset''
-button just to its left.  The other buttons are not very useful for our
-purposes.
-
-(If no window appeared at all, then you're probably logged in remotely and X
-forwarding is not set up correctly.  In this case, you can fix your X
-setup, or you can use the @option{-v} option to disable X output:
-@code{pintos -v -- run alarm-multiple}.)
-
-The text printed by Pintos inside Bochs probably went by too quickly to
-read.  However, you've probably noticed by now that the same text was
-displayed in the terminal you used to run @command{pintos}.  This is
-because Pintos sends all output both to the VGA display and to the first
-serial port, and by default the serial port is connected to Bochs's
-@code{stdin} and @code{stdout}.  You can log serial output to a file by
-redirecting at the
-command line, e.g.@: @code{pintos run alarm-multiple > logfile}.
-
-The @command{pintos} program offers several options for configuring the
-simulator or the virtual hardware.  If you specify any options, they
-must precede the commands passed to the Pintos kernel and be separated
-from them by @option{--}, so that the whole command looks like
-@code{pintos @var{option}@dots{} -- @var{argument}@dots{}}.  Invoke
-@code{pintos} without any arguments to see a list of available options.
-Options can select a simulator to use: the default is Bochs, but
-@option{--qemu} selects QEMU.  You can run the simulator
-with a debugger (@pxref{GDB}).  You can set the amount of memory to give
-the VM.  Finally, you can select how you want VM output to be displayed:
-use @option{-v} to turn off the VGA display, @option{-t} to use your
-terminal window as the VGA display instead of opening a new window
-(Bochs only), or @option{-s} to suppress serial input from @code{stdin}
-and output to @code{stdout}.
-
-The Pintos kernel has commands and options other than @command{run}.
-These are not very interesting for now, but you can see a list of them
-using @option{-h}, e.g.@: @code{pintos -h}.
-
 @node Debugging versus Testing
 @subsection Debugging versus Testing
 
@@ -243,50 +276,15 @@ When you're debugging code, it's useful to be able to run a
 program twice and have it do exactly the same thing.  On second and
 later runs, you can make new observations without having to discard or
 verify your old observations.  This property is called
-``reproducibility.''  One of the simulators that Pintos supports, Bochs,
-can be set up for
-reproducibility, and that's the way that @command{pintos} invokes it
-by default.
+``reproducibility.''  One of the simulators that Pintos supports, Bochs, is executed by @command{pintos} to provide reproducibility.
 
 Of course, a simulation can only be reproducible from one run to the
 next if its input is the same each time.  For simulating an entire
 computer, as we do, this means that every part of the computer must be
-the same.  For example, you must use the same command-line argument, the
-same disks, the same version
+the same.  For example, you must use the same command-line argument, the same disks, the same version
 of Bochs, and you must not hit any keys on the keyboard (because you
 could not be sure to hit them at exactly the same point each time)
 during the runs.
-
-While reproducibility is useful for debugging, it is a problem for
-testing thread synchronization, an important part of most of the projects.  In
-particular, when Bochs is set up for reproducibility, timer interrupts
-will come at perfectly reproducible points, and therefore so will
-thread switches.  That means that running the same test several times
-doesn't give you any greater confidence in your code's correctness
-than does running it only once.
-
-So, to make your code easier to test, we've added a feature, called
-``jitter,'' to Bochs, that makes timer interrupts come at random
-intervals, but in a perfectly predictable way.  In particular, if you
-invoke @command{pintos} with the option @option{-j @var{seed}}, timer
-interrupts will come at irregularly spaced intervals.  Within a single
-@var{seed} value, execution will still be reproducible, but timer
-behavior will change as @var{seed} is varied.  Thus, for the highest
-degree of confidence you should test your code with many seed values.
-
-On the other hand, when Bochs runs in reproducible mode, timings are not
-realistic, meaning that a ``one-second'' delay may be much shorter or
-even much longer than one second.  You can invoke @command{pintos} with
-a different option, @option{-r}, to set up Bochs for realistic
-timings, in which a one-second delay should take approximately one
-second of real time.  Simulation in real-time mode is not reproducible,
-and options @option{-j} and @option{-r} are mutually exclusive.
-
-The QEMU simulator is available as an
-alternative to Bochs (use @option{--qemu} when invoking
-@command{pintos}).  The QEMU simulator is much faster than Bochs, but it
-only supports real-time simulation and does not have a reproducible
-mode.
 
 @node Grading
 @section Grading
