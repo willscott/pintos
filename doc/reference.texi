@@ -514,7 +514,7 @@ Stub to set and get thread priority.  @xref{Priority Scheduling}.
 @deftypefunx void thread_set_nice (int @var{new_nice})
 @deftypefunx int thread_get_recent_cpu (void)
 @deftypefunx int thread_get_load_avg (void)
-Stubs for the advanced scheduler.  @xref{4.4BSD Scheduler}.
+Stubs for the advanced scheduler. 
 @end deftypefun
 
 @node Thread Switching

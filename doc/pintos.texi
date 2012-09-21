@@ -57,7 +57,6 @@
 * Project 3--Virtual Memory::   
 * Project 4--File Systems::     
 * Reference Guide::
-* 4.4BSD Scheduler::  
 * Coding Standards::            
 * Project Documentation::       
 * Debugging Tools::             
@@ -76,7 +75,7 @@
 @include vm.texi
 @include filesys.texi
 @include reference.texi
-@include 44bsd.texi
+@comment @include 44bsd.texi
 @include standards.texi
 @include doc.texi
 @include debug.texi

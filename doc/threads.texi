@@ -13,9 +13,7 @@ Before you read the description of this project, you should read all of
 the following sections: @ref{Introduction}, @ref{Coding Standards},
 @ref{Debugging Tools}, and @ref{Development Tools}.  You should at least
 skim the material from @ref{Pintos Loading} through @ref{Memory
-Allocation}, especially @ref{Synchronization}.  To complete this project
-you will also need to read @ref{4.4BSD Scheduler}.
-
+Allocation}, especially @ref{Synchronization}. 
 @menu
 * Project 1 Background::        
 * Project 1 Requirements::      
@@ -364,10 +362,7 @@ turning off interrupts.
 
 This project only requires accessing a little bit of thread state from
 interrupt handlers.  For the alarm clock, the timer interrupt needs to
-wake up sleeping threads.  In the advanced scheduler, the timer
-interrupt needs to access a few global and per-thread variables.  When
-you access these variables from kernel threads, you will need to disable
-interrupts to prevent the timer interrupt from interfering.
+wake up sleeping threads.  
 
 When you do turn off interrupts, take care to do so for the least amount
 of code possible, or you can end up losing important things such as
@@ -417,7 +412,6 @@ kernel panic or assertion failure.
 * Project 1 Design Document::   
 * Alarm Clock::                 
 * Priority Scheduling::         
-* Advanced Scheduler::          
 @end menu
 
 @node Project 1 Design Document
@@ -532,37 +526,6 @@ You need not provide any interface to allow a thread to directly modify
 other threads' priorities.
 
 The priority scheduler is not used in any later project.
-
-@node Advanced Scheduler
-@subsection Advanced Scheduler
-
-Implement a multilevel feedback queue scheduler similar to the
-4.4@acronym{BSD} scheduler to
-reduce the average response time for running jobs on your system.
-@xref{4.4BSD Scheduler}, for detailed requirements.
-
-Like the priority scheduler, the advanced scheduler chooses the thread
-to run based on priorities.  However, the advanced scheduler does not do
-priority donation.  Thus, we recommend that you have the priority
-scheduler working, except possibly for priority donation, before you
-start work on the advanced scheduler.
-
-You must write your code to allow us to choose a scheduling algorithm
-policy at Pintos startup time.  By default, the priority scheduler
-must be active, but we must be able to choose the 4.4@acronym{BSD}
-scheduler
-with the @option{-mlfqs} kernel option.  Passing this
-option sets @code{thread_mlfqs}, declared in @file{threads/thread.h}, to
-true when the options are parsed by @func{parse_options}, which happens
-early in @func{main}.
-
-When the 4.4@acronym{BSD} scheduler is enabled, threads no longer
-directly control their own priorities.  The @var{priority} argument to
-@func{thread_create} should be ignored, as well as any calls to
-@func{thread_set_priority}, and @func{thread_get_priority} should return
-the thread's current priority as set by the scheduler.
-
-The advanced scheduler is not used in any later project.
 
 @node Project 1 FAQ
 @section FAQ
@@ -714,7 +677,6 @@ kernel thread but the first.
 @menu
 * Alarm Clock FAQ::             
 * Priority Scheduling FAQ::     
-* Advanced Scheduler FAQ::      
 @end menu
 
 @node Alarm Clock FAQ
@@ -737,8 +699,6 @@ expect Pintos to have been phased out of the @value{coursenumber} curriculum.
 
 Yes, strict priority scheduling can lead to starvation
 because a thread will not run if any higher-priority thread is runnable.
-The advanced scheduler introduces a mechanism for dynamically
-changing thread priorities.
 
 Strict priority scheduling is valuable in real-time systems because it
 offers the programmer more control over which jobs get processing
@@ -828,45 +788,3 @@ using two calls to @code{printf}, resulting in the console lock being
 acquired and released twice.
 @end table
 
-@node Advanced Scheduler FAQ
-@subsection Advanced Scheduler FAQ
-
-@table @b
-@item How does priority donation interact with the advanced scheduler?
-
-It doesn't have to.  We won't test priority donation and the advanced
-scheduler at the same time.
-
-@item Can I use one queue instead of 64 queues?
-
-Yes.  In general, your implementation may differ from the description,
-as long as its behavior is the same.
-
-@item Some scheduler tests fail and I don't understand why.  Help!
-
-If your implementation mysteriously fails some of the advanced
-scheduler tests, try the following:
-
-@itemize
-@item
-Read the source files for the tests that you're failing, to make sure
-that you understand what's going on.  Each one has a comment at the
-top that explains its purpose and expected results.
-
-@item
-Double-check your fixed-point arithmetic routines and your use of them
-in the scheduler routines.
-
-@item
-Consider how much work your implementation does in the timer
-interrupt.  If the timer interrupt handler takes too long, then it
-will take away most of a timer tick from the thread that the timer
-interrupt preempted.  When it returns control to that thread, it
-therefore won't get to do much work before the next timer interrupt
-arrives.  That thread will therefore get blamed for a lot more CPU
-time than it actually got a chance to use.  This raises the
-interrupted thread's recent CPU count, thereby lowering its priority.
-It can cause scheduling decisions to change.  It also raises the load
-average.
-@end itemize
-@end table
