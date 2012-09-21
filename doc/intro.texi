@@ -51,8 +51,8 @@ It is perfectly possible to work on Pintos on your own machine, though we cannot
 @menu
 * Obtaining Pintos::
 * Setting up the Environment::
-* Source Tree Overview::        
 * Building and Running Pintos for the First Time::
+* Source Tree Overview::        
 * Debugging versus Testing::    
 @end menu
 
@@ -71,6 +71,8 @@ You'll need to do a couple things more things in your VM before you're able to w
 @node Setting up the Environment
 @subsection Building Bochs
 
+Pintos supports two different simulators: Bochs and QEMU.
+
 It is unfortunately necessary to build Bochs with a few custom flags in order to support the debugging features you'll want to use throughout this project. Fortunately, we have a script that will build it for you. Issue the following commands:
 @example
 cd ~/pintos/src/misc
@@ -78,6 +80,15 @@ sh install-bochs.sh
 @end example
 
 This will invoke a series of actions to build and install Bochs. When it has completed, type @command{bochs --version} to check that Bochs was successfully installed.
+
+@subsection Installing QEMU
+
+To install QEMU, open a shell in your VM and issue the command:
+@example
+sudo yum install qemu
+@end example
+
+Yum (the package manager of your Fedora VM) may prompt you about whether what it is about to do is okay; you should answer "y". The package manager will download and install QEMU. No more setup should be needed for QEMU to work with Pintos.
 
 @subsection Setting up your Path
 
@@ -88,17 +99,90 @@ export PATH=$PATH:~/pintos/src/utils/
 
 Test that your path now includes the Pintos binary by issuing the command @command{which pintos}. If it says @command{pintos not found} then it hasn't been properly included in your path. If it tells you where the pintos binary is, then it is.
 
-Now edit the file @file{~/.profile} and add the line:
+Now edit the file @file{~/.bashrc} and add the line:
 @example
 export PATH=$PATH:~/pintos/src/utils/
 @end example
 
-This will cause your path to be set every time you start a shell, allowing you to never have to type that command ever again. If you don't edit your @file{~/.profile}, you'll have to manually issue the command each time you open a new shell.
+This will cause your path to be set every time you start a shell, allowing you to never have to type that command ever again. If you don't edit your @file{~/.bashrc}, you'll have to manually issue the command each time you open a new shell.
+
+
+@node Building and Running Pintos for the First Time
+@subsection Building Pintos
+
+Here we'll show you how to compile and run Pintos. Pintos comes
+with quite a bit of basic functionality included and is capable of
+being compiled straight out of the box. You'll add a lot to it
+in the coming weeks of the quarter, but for now let's just compile
+the base code and make sure we can get it to run.
+
+Change directory to the @file{src/threads} directory and run @samp{make}, like so:
+@example
+cd ~/pintos/src/threads
+make
+@end example
+
+This will create a @file{build} directory under @file{threads}, 
+populate it with a
+@file{Makefile} and a few subdirectories, and then build the kernel
+inside.  The entire build should take less than 30 seconds. The contents of the @file{build} directory are described below.
+
+@subsection Running Pintos
+
+One of the programs you included in your path earlier is an executable
+called @command{pintos}. This program conveniently starts Pintos
+in a simulator.
+
+You can invoke @command{pintos} as 
+@code{pintos @var{argument}@dots{}}. Each
+@var{argument} is passed to the Pintos kernel for it to act on.
+
+Try it out.  First @command{cd} into the newly created @file{build}
+directory.  Then issue the command 
+@example
+pintos -v -- run alarm-multiple
+@end example
+
+This runs the test-case @code{alarm-multiple}. Try @code{alarm-single}. These are tests against which your code will be tested in grading, and they're your first line of testing to make sure that your code does what you think it does.
+
+Everything after @code{--} in the line above (@code{run alarm-multiple} in this case) is an argument passed to the Pintos kernel that tells it what to do. Everything before is an argument to the Pintos utility, telling it how to configure the simulator and other options. -v turns off VGA-simulation.
+
+The command @code{pintos} creates a @file{bochsrc.txt} file, 
+which is needed for running Bochs, and then invoke Bochs.  Bochs opens a new window that
+represents the simulated machine's display, and a BIOS message briefly
+flashes.  Then Pintos boots and runs the @code{alarm-multiple} test
+program, which outputs a few screenfuls of text.  
+
+You can log serial output to a file by redirecting at the
+command line, e.g.@: @code{pintos run alarm-multiple > logfile}.
+
+The @command{pintos} program offers several options for configuring the
+simulator or the virtual hardware.  If you specify any options, they
+must precede the commands passed to the Pintos kernel and be separated
+from them by @option{--}, so that the whole command looks like
+@code{pintos @var{option}@dots{} -- @var{argument}@dots{}}.  Invoke
+@code{pintos} without any arguments to see a list of available options. In the example above, you used the option @code{-v}, which turns off VGA output. Try removing it and seeing the difference.
+
+We have found in testing that VGA output is resource intensive 
+and can be crashy and slow. Your mileage may vary, so try the various output options described below.
+
+Options can select a simulator to use: the default is Bochs, but
+@option{--qemu} selects QEMU.  You can run the simulator
+with a debugger (@pxref{GDB}).  You can set the amount of memory to give
+the VM.  Finally, you can select how you want VM output to be displayed:
+use @option{-v} to turn off the VGA display, @option{-t} to use your
+terminal window as the VGA display instead of opening a new window
+(Bochs only), or @option{-s} to suppress serial input from @code{stdin}
+and output to @code{stdout}.
+
+The Pintos kernel has commands and options other than @command{run}.
+These are not very interesting for now, but you can see a list of them
+using @option{-h}, e.g.@: @code{pintos -h}.
 
 @node Source Tree Overview
 @subsection Source Tree Overview
 
-Let's take a look at what's inside.  Here's the directory structure that you should see in @file{pintos/src}:
+Here's the directory structure that you should see in @file{pintos/src}:
 
 @table @file
 @item threads/
@@ -157,83 +241,6 @@ These files may come in handy if you decide to try working with Pintos
 on your own machine.  Otherwise, you can ignore them.
 @end table
 
-@node Building and Running Pintos for the First Time
-@subsection Building Pintos
-
-Here we'll show you how to compile and run Pintos. Pintos comes
-with quite a bit of basic functionality included and is capable of
-being compiled straight out of the box. You'll add a lot to it
-in the coming weeks of the quarter, but for now let's just compile
-the base code and make sure we can get it to run.
-
-First, @command{cd} into the @file{/pintos/src/threads}
-directory.  Then, issue the @samp{make} command.  This will create a
-@file{build} directory under @file{threads}, populate it with a
-@file{Makefile} and a few subdirectories, and then build the kernel
-inside.  The entire build should take less than 30 seconds.
-
-@subsection Running Pintos
-
-One of the programs you included in your path earlier is an executable
-called @command{pintos}. This program conveniently starts Pintos
-in a simulator.
-
-You can invoke @command{pintos} as 
-@code{pintos @var{argument}@dots{}}. Each
-@var{argument} is passed to the Pintos kernel for it to act on.
-
-Try it out.  First @command{cd} into the newly created @file{build}
-directory.  Then issue the command 
-
-@example
-pintos -v -- run alarm-multiple
-@end example
-
-which passes the arguments @code{run alarm-multiple} to the Pintos
-kernel. In these arguments, everything after @code{--} in the command
-is passed to the Pintos kernel. Here, @command{run} instructs the 
-kernel to run a test and @code{alarm-multiple} is the test to run.
-Try replacing @code{run alarm-multiple} with  @code{run alarm-single}.
-Bochs should run the alarm-single test instead of the alarm-multiple
-test and output some similar (shorter) text. @code{alarm-single} and
-@code{alarm-multiple} are two examples of tests against which 
-you will test your version of Pintos throughout the quarter, and
-against which we will test your code to check that it works as 
-intended.
-
-The command @code{pintos} creates a @file{bochsrc.txt} file, 
-which is needed for
-running Bochs, and then invoke Bochs.  Bochs opens a new window that
-represents the simulated machine's display, and a BIOS message briefly
-flashes.  Then Pintos boots and runs the @code{alarm-multiple} test
-program, which outputs a few screenfuls of text.  
-
-You can log serial output to a file by redirecting at the
-command line, e.g.@: @code{pintos run alarm-multiple > logfile}.
-
-The @command{pintos} program offers several options for configuring the
-simulator or the virtual hardware.  If you specify any options, they
-must precede the commands passed to the Pintos kernel and be separated
-from them by @option{--}, so that the whole command looks like
-@code{pintos @var{option}@dots{} -- @var{argument}@dots{}}.  Invoke
-@code{pintos} without any arguments to see a list of available options. In the example above, you used the option @code{-v}, which turns off VGA output. Try removing it and seeing the difference.
-
-We have found in testing that VGA output is resource intensive 
-and can be crashy and slow. Your mileage may vary, so try the various output options described below.
-
-Options can select a simulator to use: the default is Bochs, but
-@option{--qemu} selects QEMU.  You can run the simulator
-with a debugger (@pxref{GDB}).  You can set the amount of memory to give
-the VM.  Finally, you can select how you want VM output to be displayed:
-use @option{-v} to turn off the VGA display, @option{-t} to use your
-terminal window as the VGA display instead of opening a new window
-(Bochs only), or @option{-s} to suppress serial input from @code{stdin}
-and output to @code{stdout}.
-
-The Pintos kernel has commands and options other than @command{run}.
-These are not very interesting for now, but you can see a list of them
-using @option{-h}, e.g.@: @code{pintos -h}.
-
 @subsection What "make" makes for you
 
 Following the build, the following are the interesting files in the
@@ -285,6 +292,10 @@ the same.  For example, you must use the same command-line argument, the same di
 of Bochs, and you must not hit any keys on the keyboard (because you
 could not be sure to hit them at exactly the same point each time)
 during the runs.
+
+The key lesson here is that running the same thing repeatedly with
+the same inputs doesn't guarantee that it actually works. Beware
+of bugs that are hidden by the reproducible timings of the simulator.
 
 @node Grading
 @section Grading
@@ -488,6 +499,8 @@ FOR A PARTICULAR PURPOSE.
 @xref{License}, for details of the license and lack of warranty.
 
 @localhonorcodepolicy{}
+
+See the webpage at @url{@value{coursewebpage}} for more details on academic honesty.
 
 @node Acknowledgements
 @section Acknowledgements

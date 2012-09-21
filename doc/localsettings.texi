@@ -3,8 +3,10 @@
 @set coursenumber CSE 451
 @set localpintostarpath /usr/class/cs140/pintos/pintos.tar.gz
 @set localpintoshttppath http://@/www.stanford.edu/@/class/@/cs140/@/pintos/@/pintos.@/tar.gz
+@set coursewebpage http://@/www.cs.washington.edu/@/451
+
 @set localpintosbindir /usr/class/cs140/`uname -m`/bin
-@set courseserver forkbomb.cs.washington.edu
+@set courseserver @url{forkbomb.cs.washington.edu}
 
 @set recommendvnc
 @clear recommendcygwin
@@ -44,12 +46,12 @@ specially built for this configuration.
 @end macro
 
 @macro localhonorcodepolicy{}
-In the context of Stanford's CS 140 course, please respect the spirit
-and the letter of the honor code by refraining from reading any homework
-solutions available online or elsewhere.  Reading the source code for
-other operating system kernels, such as Linux or FreeBSD, is allowed,
-but do not copy code from them literally.  Please cite the code that
-inspired your own in your design documentation.
+In the context of @value{coursenumber}, please refraining from 
+reading any homework solutions available online or elsewhere.
+Reading the source code for other operating system kernels,
+such as Linux or FreeBSD, is allowed, but do not copy code from them
+literally. Please cite code or other sources (stackoverflow, forums, etc.) that inspired your own solutions.
+
 @end macro
 
 @macro localcredits{}
