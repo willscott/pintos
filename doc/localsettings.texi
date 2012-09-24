@@ -6,7 +6,7 @@
 
 @set courseserver @url{forkbomb.cs.washington.edu}
 
-@set recommendvnc
+@clear recommendvnc
 @clear recommendcygwin
 
 @macro localmachines{}
