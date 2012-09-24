@@ -106,7 +106,6 @@ export PATH=$PATH:~/pintos/src/utils/
 
 This will cause your path to be set every time you start a shell, allowing you to never have to type that command ever again. If you don't edit your @file{~/.bashrc}, you'll have to manually issue the command each time you open a new shell.
 
-
 @node Building and Running Pintos for the First Time
 @subsection Building Pintos
 
