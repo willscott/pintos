@@ -58,9 +58,6 @@ finished.  These systems also make it possible to review changes and,
 when a change introduces a bug, drop back to working versions of code.
 @end macro
 
-@macro localcodingstandards{}
-@end macro
-
 @macro localdevelopmenttools{}
 @c Descriptions of additional, local development tools can be inserted here
 @end macro
