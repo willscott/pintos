@@ -1,6 +1,8 @@
 @node Project 4--File Systems
 @chapter Project 4: File Systems
 
+@strong{Warning: This assignment WILL change before it is assigned. It is included with the docs so that you can look ahead to the general nature of the assignment but its precise form will be different.}
+
 In the previous two assignments, you made extensive use of a
 file system without actually worrying about how it was implemented
 underneath.  For this last assignment, you will improve the
