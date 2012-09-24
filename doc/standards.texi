@@ -1,16 +1,13 @@
 @node Coding Standards
 @appendix Coding Standards
 
-@localcodingstandards{}
-
-Our standards for coding are most important for grading.  We want to
-stress that aside from the fact that we are explicitly basing part of
-your grade on these things, good coding practices will improve the
+Good coding practices will improve the
 quality of your code.  This makes it easier for your partners to
-interact with it, and ultimately, will improve your chances of having a
-good working program.  That said once, the rest of this document will
-discuss only the ways in which our coding standards will affect our
-grading.
+interact with it, and ultimately, will improve your chances of having a good working project.
+
+The quality of your comments and the clarity of your code will influence your grade. We do not expect you to adhere to particular nitpicky style practices; clear and accurate commenting is the main thing we ask for.
+
+Pintos uses some C99 features of which many folks are not aware. They're useful, and described below. Additionally, the Pintos C libraries do not include a number of ``unsafe'' functions such as @code{strcpy}. Those that are omitted from the library are listed below - this is a good opportunity to learn not to use them!
 
 @menu
 * Coding Style::                
@@ -21,19 +18,14 @@ grading.
 @node Coding Style
 @section Style
 
-Style, for the purposes of our grading, refers to how readable your
-code is.  At minimum, this means that your code is well formatted, your
-variable names are descriptive and your functions are decomposed and
-well commented.  Any other factors which make it hard (or easy) for us
-to read or use your code will be reflected in your style grade.
+Style refers to how readable your
+code is.  At minimum, this means that your code is well formatted, your variable names are descriptive and your functions are decomposed and
+well commented. Pintos as you receive it is quite well commented. Try to comment your code just as well.
 
 The existing Pintos code is written in the GNU style and largely
 follows the @uref{http://www.gnu.org/prep/standards_toc.html, , GNU
 Coding Standards}.  We encourage you to follow the applicable parts of
-them too, especially chapter 5, ``Making the Best Use of C.''  Using a
-different style won't cause actual problems, but it's ugly to see
-gratuitous differences in style from one function to another.  If your
-code is too ugly, it will cost you points.
+them too, especially chapter 5, ``Making the Best Use of C.''  
 
 Please limit C source file lines to at most 79 characters long.
 
@@ -47,9 +39,7 @@ file entirely.  Don't just put it into a comment or a conditional
 compilation directive, because that makes the resulting code hard to
 read.
 
-We're only going to do a compile in the directory for the project being
-submitted.  You don't need to make sure that the previous projects also
-compile.
+We're only going to do a compile in the directory for the project being submitted.  You don't need to make sure that the previous projects also compile.
 
 Project code should be written so that all of the subproblems for the
 project function together, that is, without the need to rebuild with
@@ -59,9 +49,6 @@ you must implement it so that it only acts that way when given a
 special command-line option of the form @option{-@var{name}}, where
 @var{name} is a name of your choice.  You can add such an option by
 modifying @func{parse_options} in @file{threads/init.c}.
-
-The introduction describes additional coding style requirements
-(@pxref{Design}).
 
 @node C99
 @section C99
