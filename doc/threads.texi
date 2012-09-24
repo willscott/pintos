@@ -409,6 +409,7 @@ kernel panic or assertion failure.
 
 @menu
 * Project 1 Design Document::   
+* Understanding Context Switching::
 * Alarm Clock::                 
 * Priority Scheduling::         
 @end menu
@@ -422,6 +423,11 @@ project 1 design document template} into your source tree under the name
 you read the design document template before you start working on the
 project.  @xref{Project Documentation}, for a sample design document
 that goes along with a fictitious project.
+
+@node Understanding Context Switching
+@subsection Understanding Context Switching
+
+For the first part of Project 1 you will use the GDB debugger to trace the execution of a series of context switches between threads. Aside from understanding a key action that the operating system undertakes often, this will also give you the opportunity to learn the basics of using GDB to debug Pintos. GDB is likely to be an extremely valuable tool to you throughout the quarter. See @xref{Debugging Tools}.
 
 @node Alarm Clock
 @subsection Alarm Clock

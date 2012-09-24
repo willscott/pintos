@@ -11,7 +11,6 @@ introduces you to a few of them.
 * Backtraces::                  
 * GDB::                         
 * Triple Faults::               
-* Modifying Bochs::             
 * Debugging Tips::              
 @end menu
 
@@ -698,15 +697,7 @@ situation, you might not be able to use @func{printf} for debugging,
 because the reboots might be happening even before everything needed for
 @func{printf} is initialized.
 
-There are at least two ways to debug triple faults.  First, you can run
-Pintos in Bochs under GDB (@pxref{GDB}).  If Bochs has been built
-properly for Pintos, a triple fault under GDB will cause it to print the
-message ``Triple fault: stopping for gdb'' on the console and break into
-the debugger.  (If Bochs is not running under GDB, a triple fault will
-still cause it to reboot.)  You can then inspect where Pintos stopped,
-which is where the triple fault occurred.
-
-Another option is what I call ``debugging by infinite loop.''
+One way to debug triple faults is to use ``debugging by infinite loop.''
 Pick a place in the Pintos code, insert the infinite loop
 @code{for (;;);} there, and recompile and run.  There are two likely
 possibilities:
@@ -728,38 +719,6 @@ Now move the infinite loop earlier in the code sequence.
 If you move around the infinite loop in a ``binary search'' fashion, you
 can use this technique to pin down the exact spot that everything goes
 wrong.  It should only take a few minutes at most.
-
-@node Modifying Bochs
-@section Modifying Bochs
-
-An advanced debugging technique is to modify and recompile the
-simulator.  This proves useful when the simulated hardware has more
-information than it makes available to the OS.  For example, page
-faults have a long list of potential causes, but the hardware does not
-report to the OS exactly which one is the particular cause.
-Furthermore, a bug in the kernel's handling of page faults can easily
-lead to recursive faults, but a ``triple fault'' will cause the CPU to
-reset itself, which is hardly conducive to debugging.
-
-In a case like this, you might appreciate being able to make Bochs
-print out more debug information, such as the exact type of fault that
-occurred.  It's not very hard.  You start by retrieving the source
-code for Bochs 2.2.6 from @uref{http://bochs.sourceforge.net} and
-saving the file @file{bochs-2.2.6.tar.gz} into a directory.  
-The script @file{pintos/src/misc/bochs-2.2.6-build.sh}
-applies a number of patches contained in @file{pintos/src/misc}
-to the Bochs tree, then builds Bochs and installs it in a directory
-of your choice.
-Run this script without arguments to learn usage instructions.
-To use your @file{bochs} binary with @command{pintos},
-put it in your @env{PATH}, and make sure that it is earlier than
-@file{@value{localpintosbindir}/bochs}.
-
-Of course, to get any good out of this you'll have to actually modify
-Bochs.  Instructions for doing this are firmly out of the scope of
-this document.  However, if you want to debug page faults as suggested
-above, a good place to start adding @func{printf}s is
-@func{BX_CPU_C::dtranslate_linear} in @file{cpu/paging.cc}.
 
 @node Debugging Tips
 @section Tips
