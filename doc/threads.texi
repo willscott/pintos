@@ -38,8 +38,7 @@ The first step is to read and understand the code for the initial thread
 system.
 Pintos already implements thread creation and thread completion,
 a simple scheduler to switch between threads, and synchronization
-primitives (semaphores, locks, condition variables, and optimization
-barriers).
+primitives (semaphores, locks, and condition variables).
 
 Some of this code might seem slightly mysterious.  If
 you haven't already compiled and run the base system, as described in
@@ -170,8 +169,8 @@ Infrastructure}, for more information.
 
 @item synch.c
 @itemx synch.h
-Basic synchronization primitives: semaphores, locks, condition
-variables, and optimization barriers.  You will need to use these for
+Basic synchronization primitives: semaphores, locks, and condition
+variables.  You will need to use these for
 synchronization in all
 four projects.  @xref{Synchronization}, for more information.
 
