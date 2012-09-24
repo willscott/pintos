@@ -1,16 +1,13 @@
 @node Coding Standards
 @appendix Coding Standards
 
-@localcodingstandards{}
-
-Our standards for coding are most important for grading.  We want to
-stress that aside from the fact that we are explicitly basing part of
-your grade on these things, good coding practices will improve the
-quality of your code.  This makes it easier for your partners to
-interact with it, and ultimately, will improve your chances of having a
-good working program.  That said once, the rest of this document will
-discuss only the ways in which our coding standards will affect our
-grading.
+We encourage you to keep your code readable to help your TAs grade you fairly.
+Some points from the projects are allocated to coding style to reflect this
+goal. In addition, we believe that encouraging legible code has several other
+benefits: Your partners will have an easier time interacting with your code,
+Bugs commonly occur in poorly structured, overly-complex code, and ultimately
+you will be forming good habits for future development. This section will
+provide some suggestions for writing readable code.
 
 @menu
 * Coding Style::                
@@ -21,21 +18,20 @@ grading.
 @node Coding Style
 @section Style
 
-Style, for the purposes of our grading, refers to how readable your
-code is.  At minimum, this means that your code is well formatted, your
+Style refers to how readable your
+code is.  This means that your code is well formatted, your
 variable names are descriptive and your functions are decomposed and
-well commented.  Any other factors which make it hard (or easy) for us
-to read or use your code will be reflected in your style grade.
+well commented.
 
 The existing Pintos code is written in the GNU style and largely
 follows the @uref{http://www.gnu.org/prep/standards_toc.html, , GNU
 Coding Standards}.  We encourage you to follow the applicable parts of
 them too, especially chapter 5, ``Making the Best Use of C.''  Using a
 different style won't cause actual problems, but it's ugly to see
-gratuitous differences in style from one function to another.  If your
-code is too ugly, it will cost you points.
+gratuitous differences in style from one function to another.
 
-Please limit C source file lines to at most 79 characters long.
+Please limit C source file lines to 80 characters long, to conform to
+the existing code.
 
 Pintos comments sometimes refer to external standards or
 specifications by writing a name inside square brackets, like this:
@@ -60,7 +56,7 @@ special command-line option of the form @option{-@var{name}}, where
 @var{name} is a name of your choice.  You can add such an option by
 modifying @func{parse_options} in @file{threads/init.c}.
 
-The introduction describes additional coding style requirements
+The introduction describes additional coding style guidelines
 (@pxref{Design}).
 
 @node C99
