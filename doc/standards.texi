@@ -33,31 +33,27 @@ gratuitous differences in style from one function to another.
 Please limit C source file lines to 80 characters long, to conform to
 the existing code.
 
-Pintos comments sometimes refer to external standards or
-specifications by writing a name inside square brackets, like this:
-@code{[IA32-v3a]}.  These names refer to the reference names used in
-this documentation (@pxref{Bibliography}).
+Pintos comments sometimes refer to external standards or specifications by
+writing a name inside square brackets, like this: @code{[IA32-v3a]}. These
+names refer to the reference names used in this documentation
+(@pxref{Bibliography}).
 
-If you remove existing Pintos code, please delete it from your source
-file entirely.  Don't just put it into a comment or a conditional
-compilation directive, because that makes the resulting code hard to
-read.
+If you remove existing Pintos code, please delete it from your source file
+entirely. Don't just put it into a comment or a conditional compilation
+directive, because that makes the resulting code hard to read.
 
 We're only going to do a compile in the directory for the project being
-submitted.  You don't need to make sure that the previous projects also
-compile.
+submitted. You don't need to make sure that the previous projects also compile.
 
-Project code should be written so that all of the subproblems for the
-project function together, that is, without the need to rebuild with
-different macros defined, etc.  If you do extra credit work that
-changes normal Pintos behavior so as to interfere with grading, then
-you must implement it so that it only acts that way when given a
-special command-line option of the form @option{-@var{name}}, where
-@var{name} is a name of your choice.  You can add such an option by
-modifying @func{parse_options} in @file{threads/init.c}.
+Project code should be written so that all of the subproblems for the project
+function together, that is, without the need to rebuild with different macros
+defined, etc. If you do extra credit work that changes normal Pintos behavior
+so as to interfere with grading, then you must implement it so that it only
+acts that way when given a special command-line option of the form
+@option{-@var{name}}, where @var{name} is a name of your choice. You can add
+such an option by modifying @func{parse_options} in @file{threads/init.c}.
 
-The introduction describes additional coding style guidelines
-(@pxref{Design}).
+The introduction describes additional coding style guidelines (@pxref{Design}).
 
 @node C99
 @section C99
