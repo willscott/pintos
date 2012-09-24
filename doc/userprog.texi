@@ -1,6 +1,7 @@
 @node Project 2--User Programs
 @chapter Project 2: User Programs
 
+
 Now that you've worked with Pintos and are becoming familiar with its
 infrastructure and thread package, it's time to start working on the
 parts of the system that allow running user programs.
