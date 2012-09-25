@@ -157,6 +157,21 @@ sema_test_helper (void *sema_)
     }
 }
 
+/* tom: I find it easier to think of a lock in its own terms,
+ * rather than in terms of a semaphore.  A lock provides mutual exclusion.
+ * There are two operations: acquire and release.  Acquire waits
+ * until the lock is free, and then acquires it, atomically.
+ * Only one thread can hold the lock at a time, and the lock holder
+ * must be the one that calls release.
+ *
+ * In Pintos, locks are implemented in terms of semaphores.
+ * One can also implement semaphores in terms of locks!
+ * However, we need semaphores for interrupt handlers (since
+ * we need a non-blocking wakeup to call within an interrupt handler),
+ * so the choice here makes some sense, even if its more confusing than
+ * it needs to be.
+ */
+
 /* Initializes LOCK.  A lock can be held by at most a single
    thread at any given time.  Our locks are not "recursive", that
    is, it is an error for the thread currently holding a lock to
@@ -284,6 +299,20 @@ cond_init (struct condition *cond)
    interrupt handler.  This function may be called with
    interrupts disabled, but interrupts will be turned back on if
    we need to sleep. */
+/* tom: a note on the implementation.  It would be conceptually simpler
+ * to implement this directly in terms of thread_block().
+ * The key point is that you need to atomically wait for the condition
+ * and release the lock.  You can do that by turning off interrrupts
+ * and calling thread_block.  Or you can implement it in terms of semaphores,
+ * as is done here.  This code is tricky since once you release the lock
+ * someone else might grab the lock, and call condition_signal before 
+ * you've finished condition_wait!  However, this will still work -- 
+ * the signaller will call semaphore_up, so when wait calls semaphore_down,
+ * it finds out it doesn't need to wait.  Work out for yourself why it
+ * works in the other direction -- if wait calls "down" before signal 
+ * calls "up".  We create a semaphore for each waiter so that we can
+ * precisely deliver the signal to the correct waiter.
+ */
 void
 cond_wait (struct condition *cond, struct lock *lock) 
 {

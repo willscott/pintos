@@ -24,6 +24,36 @@ typedef int tid_t;
 #define PRI_DEFAULT 31                  /* Default priority. */
 #define PRI_MAX 63                      /* Highest priority. */
 
+/* tom: after you read what's below, you might wonder why Pintos 
+ * allocates the thread
+ * control block on the thread kernel stack.  One reason is to save
+ * work -- but our goal isn't to build the fastest possible operating
+ * system, so that's pretty lame.  Another reason is that "malloc"
+ * uses locks and therefore the current thread, and so that means
+ * you can't use malloc until the thread system is initalized, but if
+ * the thread system needs to call malloc, ...
+ *
+ * This way, we can find the current thread from
+ * the current stack pointer.  (On a uniprocessor, you
+ * can stick the current thread in a static variable, but on a multiprocessor,
+ * each processor has its own current thread -- but each processor
+ * has its own stack pointer, so that works out!)
+ *
+ * OK, then, why does Pintos put the thread control block at the end
+ * of the stack where it might be clobbered by a procedure call, rather
+ * than underneath the stack where it will be safe?  I would have, but they
+ * chose to do it this way in part because they want to reuse the stack
+ * used in "main()" to become a thread stack, and the loader didn't
+ * reserve enough room under the stack pointer for the thread control block.
+ *
+ * Similarly, rather than having a separate list of threads, the
+ * list element data structure is embedded inside the thread control
+ * block.  This is a bit of a pain for bookkeeping, but it has the upside
+ * that you only need to allocate one block of data per thread.
+ * This reduces error handling code, in case you might run out of memory --
+ * you'll only get that error when you init the thread, not when it 
+ * tries to wait.
+ */
 /* A kernel thread or user process.
 
    Each thread structure is stored in its own 4 kB page.  The

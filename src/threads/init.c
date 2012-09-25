@@ -80,14 +80,33 @@ main (void)
   char **argv;
 
   /* Clear BSS. */  
+  /* tom: the loader does not zero uninitialized data, so we need to;
+   * otherwise, your code might do unexpected things. 
+   * It is not that the loader is lazy -- it is constrained to fit 
+   * into a small space. 
+   */
   bss_init ();
 
   /* Break command line into arguments and parse options. */
+  /* tom: The loader passes us arguments in a pre-defined location
+   * in memory.  These arguments parameterize the OS -- for example,
+   * how big we should assume memory to be, so we need to parse the 
+   * arguments early.  But they also specify what tests to run, which we
+   * don't use until later -- after the OS has been initialized. */
   argv = read_command_line ();
   argv = parse_options (argv);
 
   /* Initialize ourselves as a thread so we can use locks,
      then enable console locking. */
+  /* tom: the order of initalization code matters.  malloc 
+   * uses a lock to protect its shared data structures.  Although we're
+   * running single-threaded for now, so locks will always be free, 
+   * the lock code checks the current thread (to verify the lock is
+   * being released by the lock holder).  So we need to have set up the 
+   * current thread before we can allow calls to the lock system (in 
+   * thread_init).  We need to set up malloc before we can allow calls 
+   * that allocate memory.  We need to set up the console (which uses 
+   * locks) before we can do printf.  And so forth. */
   thread_init ();
   console_init ();  
 
@@ -96,6 +115,9 @@ main (void)
           init_ram_pages * PGSIZE / 1024);
 
   /* Initialize memory system. */
+  /* tom: two memory allocators -- one for pages (palloc) and one for 
+   * variable size things (malloc).  malloc uses palloc, so we need
+   * to init palloc first */
   palloc_init (user_page_limit);
   malloc_init ();
   paging_init ();
@@ -119,6 +141,10 @@ main (void)
   /* Start thread scheduler and enable interrupts. */
   thread_start ();
   serial_init_queue ();
+
+  /* tom: calibrating the timer involves counting the number
+   * of loop iterations between timer interrupts, to measure 
+   * the relative speed of the processor.  So interrupts need to be on */
   timer_calibrate ();
 
 #ifdef FILESYS
@@ -133,7 +159,9 @@ main (void)
 
   printf ("Boot complete.\n");
   
-  /* Run actions specified on kernel command line. */
+  /* Run actions specified on kernel command line. 
+   * tom: note that we parsed the command line much earlier.
+   * and only now get around to running those commands */
   run_actions (argv);
 
   /* Finish up. */
@@ -297,7 +325,12 @@ run_task (char **argv)
 }
 
 /* Executes all of the actions specified in ARGV[]
-   up to the null pointer sentinel. */
+   up to the null pointer sentinel. 
+ * tom: this is a complex bit of code, but you can ignore it.
+ * in practice, it just calls "void run_task()"; the other part here
+ * is for testing the file system.  And for assignment 1, run_task just
+ * calls "void run_test()" -- the specific test routine.
+*/
 static void
 run_actions (char **argv) 
 {
