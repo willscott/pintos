@@ -6,13 +6,9 @@ Here are some tools that you might find useful while developing code.
 @menu
 * Tags::
 * cscope::
-* CVS::
 @ifset recommendvnc
 * VNC::
 @end ifset 
-@ifset recommendcygwin
-* Cygwin::
-@end ifset
 @end menu
 
 @node Tags
@@ -58,27 +54,6 @@ Emacs and some versions of @command{vi} have their own interfaces to
 visit @url{http://cscope.sourceforge.net, the @command{cscope} home
 page}.
 
-@node CVS
-@section CVS
-
-CVS is a version-control system.  That is, you can use it to keep
-track of multiple versions of files.  The idea is that you do some
-work on your code and test it, then check it into the version-control
-system.  If you decide that the work you've done since your last
-check-in is no good, you can easily revert to the last checked-in
-version.  Furthermore, you can retrieve any old version of your code
-as of some given day and time.  The version control logs tell you who
-made changes and when.
-
-CVS is not the best version control system out there, but it's
-free, it's fairly easy to use, and it's already installed in most
-Unix-like environments.
-
-For more information, visit the @uref{https://www.cvshome.org/, , CVS
-home page}.
-
-@include localcvsinstructions.texi
-
 @ifset recommendvnc
 @node VNC
 @section VNC
@@ -90,18 +65,6 @@ anywhere on the Internet and from a wide variety of machine
 architectures.  It is already installed on the lab machines.  
 For more information, look at the @uref{http://www.realvnc.com/, , VNC
 Home Page}.
-@end ifset
-
-@ifset recommendcygwin
-@node Cygwin
-@section Cygwin
-
-@uref{http://cygwin.com/, ,Cygwin} provides a Linux-compatible environment
-for Windows.  It includes ssh client and an X11 server, Cygwin/X.  If your
-primary work environment is Windows, you will find Cygwin/X extremely
-useful for these projects.  Install Cygwin/X, then start the X server
-and open a new xterm.  The X11 server also allows you to run pintos while
-displaying the bochs- or qemu-emulated console on your Windows desktop.
 @end ifset
 
 @localdevelopmenttools{}

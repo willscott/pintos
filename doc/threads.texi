@@ -38,8 +38,7 @@ The first step is to read and understand the code for the initial thread
 system.
 Pintos already implements thread creation and thread completion,
 a simple scheduler to switch between threads, and synchronization
-primitives (semaphores, locks, condition variables, and optimization
-barriers).
+primitives (semaphores, locks, and condition variables).
 
 Some of this code might seem slightly mysterious.  If
 you haven't already compiled and run the base system, as described in
@@ -170,8 +169,8 @@ Infrastructure}, for more information.
 
 @item synch.c
 @itemx synch.h
-Basic synchronization primitives: semaphores, locks, condition
-variables, and optimization barriers.  You will need to use these for
+Basic synchronization primitives: semaphores, locks, and condition
+variables.  You will need to use these for
 synchronization in all
 four projects.  @xref{Synchronization}, for more information.
 
@@ -410,6 +409,7 @@ kernel panic or assertion failure.
 
 @menu
 * Project 1 Design Document::   
+* Understanding Context Switching::
 * Alarm Clock::                 
 * Priority Scheduling::         
 @end menu
@@ -423,6 +423,26 @@ project 1 design document template} into your source tree under the name
 you read the design document template before you start working on the
 project.  @xref{Project Documentation}, for a sample design document
 that goes along with a fictitious project.
+
+@node Understanding Context Switching
+@subsection Understanding Context Switching
+
+For the first part of Project 1 you will use the GDB debugger to trace the execution of a series of context switches between threads. Aside from understanding an action OSes frequently execute, this will give you the opportunity to learn the basics of using GDB to debug Pintos. GDB is likely to be an extremely valuable tool to you throughout the quarter. For instructions on using GDB to debug Pintos, @pxref{Debugging Tools}.
+
+Suppose the main thread in Pintos creates two threads, and then calls yield.  Each of those two threads, do nothing but call yield once.
+@verbatim
+void yielder () @{ thread_yield(); @}
+
+thread_tid t1 = thread_create("first yielder", PRI_DEFAULT, yielder, NULL);
+thread_tid t2 = thread_create("second yielder", PRI_DEFAULT, yielder, NULL);
+thread_yield();
+@end verbatim
+
+If no timer interrupts occur, trace the sequence of procedure calls that occur from when the main thread calls yield, until the yield returns.  (No output needed -- just step through in the debugger.)  Print a backtrace before each call to switch_thread and after it returns.  (Warning -- the return doesn't come back to the same place!  Single step through switch_thread.)  Label the backtrace with the name of the thread that called it (e.g., "first yielder" or "main").
+
+When "first yielder" finishes, which thread deletes its stack? Why?
+
+A thread in Pintos can be suspended by a timer interrupt, with the processor given to a different thread.  Give the backtrace of the kernel stack of the suspended thread, when the new thread begins running.
 
 @node Alarm Clock
 @subsection Alarm Clock
@@ -531,28 +551,6 @@ The priority scheduler is not used in any later project.
 @section FAQ
 
 @table @b
-@item How much code will I need to write?
-
-Here's a summary of our reference solution, produced by the
-@command{diffstat} program.  The final row gives total lines inserted
-and deleted; a changed line counts as both an insertion and a deletion.
-
-The reference solution represents just one possible solution.  Many
-other solutions are also possible and many of those differ greatly from
-the reference solution.  Some excellent solutions may not modify all the
-files modified by the reference solution, and some may modify files not
-modified by the reference solution.
-
-@verbatim
- devices/timer.c       |   42 +++++-
- threads/fixed-point.h |  120 ++++++++++++++++++
- threads/synch.c       |   88 ++++++++++++-
- threads/thread.c      |  196 ++++++++++++++++++++++++++----
- threads/thread.h      |   23 +++
- 5 files changed, 440 insertions(+), 29 deletions(-)
-@end verbatim
-
-@file{fixed-point.h} is a new file added by the reference solution.
 
 @item How do I update the @file{Makefile}s when I add a new source file?
 

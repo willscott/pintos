@@ -1,37 +1,28 @@
 @c Local settings
 
 @set coursenumber CSE 451
-@set localpintostarpath /usr/class/cs140/pintos/pintos.tar.gz
-@set localpintoshttppath http://@/www.stanford.edu/@/class/@/cs140/@/pintos/@/pintos.@/tar.gz
+@set localpintoshttppath http://@/www.github.com/@/willscott/@/pintos
 @set coursewebpage http://@/www.cs.washington.edu/@/451
 
-@set localpintosbindir /usr/class/cs140/`uname -m`/bin
 @set courseserver @url{forkbomb.cs.washington.edu}
 
-@set recommendvnc
+@clear recommendvnc
 @clear recommendcygwin
 
 @macro localmachines{}
-The CS 140 ``officially supported'' Pintos development machines are
-the machines in Sweet Hall managed by Stanford ITSS, as described on
-the @uref{http://www.stanford.edu/services/cluster/environs/sweet/, ,
-ITSS webpage}.  You may use the Solaris or Linux machines.
+The 451 ``officially supported'' Pintos development environment is
+the support managed Fedora VM image.  Instructions for installation
+of Pintos on this image are described @code{todo}
 @end macro
 
 @macro localpathsetup{}
 Under @command{csh}, Stanford's login shell, you can do so
-with this command:@footnote{The term @samp{`uname -m`} expands to either
-@file{sun4u} or @file{i686} according to the type of computer you're
-logged into.}
+with this command:
 @example
-set path = ( @value{localpintosbindir} $path )
+bash src/misc/setup-path.sh
 @end example
 @noindent
-@strong{Notice that both @samp{`} are left single quotes or
-``backticks,'' not apostrophes (@samp{'}).}
-It is a good idea to add this line to the @file{.cshrc} file
-in your home directory.  Otherwise, you'll have to type it every time
-you log in.
+This will cause the src/utils directory to be added to your path.
 @end macro
 
 @macro localcrossbuild{}
@@ -60,20 +51,11 @@ literally. Please cite code or other sources (stackoverflow, forums, etc.) that 
 
 @macro localcvspolicy{}
 Instead, we recommend integrating your team's changes early and often,
-using a source code control system such as CVS (@pxref{CVS}).
+using a source code control system such as CVS .
 This is less likely to produce surprises, because everyone can see
 everyone else's code as it is written, instead of just when it is
 finished.  These systems also make it possible to review changes and,
 when a change introduces a bug, drop back to working versions of code.
-@end macro
-
-@macro localcodingstandards{}
-All of you should have taken a class like CS 107, so we expect you to be
-familiar with some set of coding standards such as
-@uref{http://www.stanford.edu/class/cs140/projects/misc/CodingStandards.pdf,
-, CS 107 Coding Standards}. Even if you've taken 107, we recommend
-reviewing that document.  We expect code at the ``Peer-Review Quality''
-level described there.
 @end macro
 
 @macro localdevelopmenttools{}
