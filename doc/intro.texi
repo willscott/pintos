@@ -66,7 +66,7 @@ git clone https://github.com/willscott/pintos.git ~/pintos
 
 This will copy the latest version of the project into a directory called @file{pintos} in the home directory of your VM.
 
-You'll need to do a couple things more things in your VM before you're able to work on Pintos. 
+You'll need to do a couple more things in your VM before you're able to work on Pintos. 
 
 @node Setting up the Environment
 @subsection Building Bochs
@@ -83,6 +83,8 @@ This will invoke a series of actions to build and install Bochs. When it has com
 
 @subsection Installing QEMU
 
+You will only be able to install QEMU within your own VM.  It should already be installed on the instructional machines and on forkbomb.
+
 To install QEMU, open a shell in your VM and issue the command:
 @example
 sudo yum install qemu
@@ -92,13 +94,13 @@ Yum (the package manager of your Fedora VM) may prompt you about whether what it
 
 @subsection Setting up your Path
 
-You'll need to add a number of Pintos utilities to your path. In order to do so, run the following commands:
+You'll need to add a number of Pintos utilities to your path, along with the custom version of bochs you installed. In order to do so, run the following commands:
 @example
 cd ~/pintos/src/misc
 sh setup-path.sh
 @end example
 
-This will cause your path to be set every subsequent time you start a shell.
+This will cause your path to be set every @emph{subsequent} time you start a shell.
 Open a new shell. @command{pintos} should now be a working command.
 
 @node Building and Running Pintos for the First Time
