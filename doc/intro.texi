@@ -101,7 +101,8 @@ sh setup-path.sh
 @end example
 
 This will cause your path to be set every @emph{subsequent} time you start a shell.
-Open a new shell. @command{pintos} should now be a working command.
+Open a new shell (or run @code{source ~/.bashrc}). @command{pintos} should now print usage instructions.  Likewise,
+the @command{bochs} header should note that it was build from an SVN snapshot.
 
 @node Building and Running Pintos for the First Time
 @subsection Building Pintos
