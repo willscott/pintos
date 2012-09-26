@@ -214,6 +214,12 @@ intr_context (void)
   return in_external_intr;
 }
 
+/* tom: NOTE -- using static data structures like this will not work 
+ * on a multiprocessor (because multiple processors could set yield-on-return
+ * at the same time)!  it would be better to set 
+ * yield-on-return in the thread control block.
+ */
+
 /* During processing of an external interrupt, directs the
    interrupt handler to yield to a new process just before
    returning from the interrupt.  May not be called at any other
@@ -383,6 +389,13 @@ intr_handler (struct intr_frame *frame)
       in_external_intr = false;
       pic_end_of_interrupt (frame->vec_no); 
 
+/* tom: we're at the end of the interrupt handler; if the interrupted
+ * thread is to be preempted, we switch now, resuming execution of
+ * the next thread to run instead of exiting the interrupt handler.  
+ * Other OS'es do this a bit differently --
+ * they save the state of the current thread, and exit the interrupt
+ * handler directly to the new thread.
+ */
       if (yield_on_return) 
         thread_yield (); 
     }

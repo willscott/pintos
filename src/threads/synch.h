@@ -41,6 +41,20 @@ void cond_wait (struct condition *, struct lock *);
 void cond_signal (struct condition *, struct lock *);
 void cond_broadcast (struct condition *, struct lock *);
 
+/* tom: DO NOT USE THIS ROUTINE UNDER ANY CIRCUMSTANCES!!!!!
+ * It is not an "optimization" nor is it a "barrier" -- it is dangerous code. 
+ * It is only included here because its needed for some configuration
+ * code in one of the device drivers, and even there it could have
+ * been engineered around.  This should be a private routine inside
+ * a class file, but we're not in C++ so we can't do that. 
+ *
+ * OK, now that I've piqued your interest, what this does is to prevent
+ * the compiler from reordering instructions across the call to this
+ * routine.  But if your code depends on that, it means you've badly 
+ * designed it. Use structured synchronization code -- locks and 
+ * condition variables instead.  Ignore the reference guide. 
+ */
+
 /* Optimization barrier.
 
    The compiler will not reorder operations across an

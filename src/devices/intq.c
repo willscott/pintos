@@ -1,3 +1,4 @@
+/* tom: See comment at the top of intq.h */
 #include "devices/intq.h"
 #include <debug.h>
 #include "threads/thread.h"
