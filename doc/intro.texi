@@ -79,7 +79,7 @@ cd ~/pintos/src/misc
 sh install-bochs.sh
 @end example
 
-This will invoke a series of actions to build and install Bochs. When it has completed, type @command{bochs --version} to check that Bochs was successfully installed.
+This will invoke a series of actions to build and install Bochs into @code{~/pintos/build}.
 
 @subsection Installing QEMU
 
