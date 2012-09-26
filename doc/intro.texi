@@ -34,6 +34,7 @@ projects.
 @menu
 * Getting Started::             
 * Grading::                     
+* Submitting::
 * Legal and Ethical Issues::    
 * Acknowledgements::            
 * Trivia::                      
@@ -484,6 +485,24 @@ will be penalized.
 In the end, remember your audience.  Code is written primarily to be
 read by humans.  It has to be acceptable to the compiler too, but the
 compiler doesn't care about how it looks or how well it is written.
+
+@node Submitting
+@section Submitting
+
+Submissions will be made through the Catalyst dropbox for the course.
+You will be working in a group.  @emph{All} group members should
+submit your groups design document for the assignment.  This allows
+the TAs to provide feedback / grades to all group members.  One
+members should also upload your code submission.  The code submission
+should be created as follows:
+
+@example
+cd ~/pintos
+cd src && make clean
+tar czf submission.tgz src
+@end example
+
+These commands can also be run via the script @code{src/misc/package.sh}.
 
 @node Legal and Ethical Issues
 @section Legal and Ethical Issues
