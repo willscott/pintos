@@ -1,8 +1,6 @@
 @node Project 2--User Programs
 @chapter Project 2: User Programs
 
-@strong{Warning: This assignment WILL change before it is assigned. It is included with the docs so that you can look ahead to the general nature of the assignment but its precise form will be different.}
-
 Now that you've worked with Pintos and are becoming familiar with its
 infrastructure and thread package, it's time to start working on the
 parts of the system that allow running user programs.
@@ -26,7 +24,7 @@ You might find it useful to go back and reread how to run the tests
 
 @menu
 * Project 2 Background::        
-* Project 2 Suggested Order of Implementation::  
+* Project 2 Suggested Order of Things You Should Do::  
 * Project 2 Requirements::      
 * Project 2 FAQ::               
 * 80x86 Calling Convention::    
@@ -458,11 +456,11 @@ modified @func{page_fault} so that a page fault in the kernel merely
 sets @code{eax} to @t{0xffffffff} and copies its former value
 into @code{eip}.
 
-@node Project 2 Suggested Order of Implementation
-@section Suggested Order of Implementation
+@node Project 2 Suggested Order of Things You Should Do
+@section Project 2 Suggested Order of Things You Should Do
 
-We suggest first implementing the following, which can happen in
-parallel:
+Many of these things can happen in parallel, but this is a good rough
+ordering for your work on this assignment.
 
 @itemize
 @item
@@ -487,6 +485,62 @@ a program will include those arguments in the name of the program, which
 will probably fail.
 
 @item
+Once you are able to get a user program to execute (the minimal way to do
+this is to take the shortcut above in order to prevent argument passing from
+causing immediate segfaults), we ask you to fire up GDB and get a handle on 
+how syscalls happen in Pintos.
+
+Compile Pintos, compile the examples in src/examples, create a filesystem 
+(see above), and insert the @file{halt} program into the Pintos filesystem.
+Then, execute: 
+
+@example
+pintos -t -- run 'halt'
+@end example
+
+This will start Pintos and tell it to execute the user program @file{halt} 
+program which you have put in the Pintos filesystem.
+
+You should see Pintos print out the message ``system call!''. Check out
+@file{src/userprog/syscall.c} for the location where this print statement 
+occurs. This is the Pintos handler for system calls. Soon, 
+you will implement code here that reads the appropriate system call number
+and executes the requested system call in the kernel. For now, try running
+the @file{halt} program under GDB and setting a breakpoint in syscall_handler,
+which is called some time after the halt program calls @code{halt()}.
+
+@example
+(gdb) debugpintos
+(gdb) break syscall_handler
+(gdb) c
+@end example
+
+Once here, take a look at the contents of the @code{struct intr_frame *f} 
+passed as an argument. What are its contents? (Hint: @code{struct intr_frame}
+is defined in @file{src/threads/interrupt.h}. Where can you locate the syscall
+number? Where are the arguments to the syscall (if any)?
+
+You may need to use the backtrace program in order to identify the parts
+of the stack which occur in the user program's memory. You can give it
+multiple object files to reference addresses from. You can also include
+the userlevel object file in GDB with:
+
+@example
+(gdb) loadusersymbols ../../examples/halt
+@end example
+
+After including the user symbols you should be able to breakpoint on
+code from the the user level program. Try breakpointing the @code{halt} 
+function call and tracing it all the way through the user level syscall
+code, the trap to the kernel, the interrupt handler code and back into
+@code{syscall_handler}. Locate where the syscall number is stored. Then
+try running a user program (you can write one yourself) that calls a
+function with an argument, such as exit, and locate where its arguments
+are stored. You'll need this information to write your syscall handling
+code. It may take you a while to figure this out - start looking at it
+early!
+
+@item
 User memory access (@pxref{Accessing User Memory}).  All system calls
 need to read user memory.  Few system calls need to write to user
 memory.
@@ -495,6 +549,10 @@ memory.
 System call infrastructure (@pxref{System Calls}).  Implement enough
 code to read the system call number from the user stack and dispatch to
 a handler based on it.
+
+If you don't know how to do this, make sure you've gone through the
+item above tracing the execution of a syscall all the way from the
+userlevel procedure call to the syscall_handler.
 
 @item
 The @code{exit} system call.  Every user program that finishes in the
@@ -626,8 +684,9 @@ inefficiency of copying the entire memory of a process on every call to
 @code{fork}.
 @end deftypefn
 
-@deftypefn {System Call} int exec (const char *@var{path_to_executable}, const char *@var{argv[]})
-Runs the executable whose name is given in @var{cmd_line}, replacing the
+@deftypefn {System Call} int exec (const char *@var{cmd_line})
+Parses cmd_line into the name of a file and its arguments. Then,
+runs the executable whose name is the first token, replacing the
 current process image with the process image of the executable.
 Specifically, exec overwrites the text, data, bss and stack of the calling
 process with those features of the program being @code{exec}'d.
@@ -644,11 +703,11 @@ have the same value then @code{dup2} has no effect. After a call to
 @code{dup2} the two file descriptors may be used interchangeably.
 @end deftypefn
 
-@deftypefn {System Call} int pipe (int @var{pipefd[2]})
+@deftypefn {System Call} int pipe (int @code{pipefd[2]})
 Creates a pipe - a unidirectional data channel for communication between
 processes. The passed array is populated with two file descriptors (a
 file descriptor is of type @code{int}). After the call to @code{pipe}, 
-@var{pipefd[0]} refers to the read end of the pipe while @var{pipefd[1]}
+@code{pipefd[0]} refers to the read end of the pipe while @code{pipefd[1]}
 refers to the write end of the pipe.
 
 Data written to the write end of the pipe is buffered by the kernel 
