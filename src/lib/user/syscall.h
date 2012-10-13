@@ -23,7 +23,7 @@ typedef int mapid_t;
 void halt (void) NO_RETURN;
 void exit (int status) NO_RETURN;
 pid_t fork ();
-int exec (const char *file);
+int exec (const char *cmd_line);
 int dup2 (int oldfd, int newfd);
 int pipe (int pipefd[]);
 int wait (pid_t);

@@ -91,9 +91,9 @@ int pipe (int pipefd[])
   return (int) syscall1 (SYS_PIPE, pipefd);
 }
 int
-exec (const char *file)
+exec (const char *cmd_line)
 {
-  return (int) syscall1 (SYS_EXEC, file);
+  return (int) syscall1 (SYS_EXEC, cmd_line);
 }
 
 int
