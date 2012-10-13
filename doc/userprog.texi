@@ -220,12 +220,16 @@ current directory is @file{userprog/build}:
 
 @example
 pintos-mkdisk filesys.dsk --filesys-size=2
-pintos -f -q
-pintos -p ../../examples/echo -a echo -- -q
-pintos -q run 'echo x'
+pintos -t -- -f
+pintos -t -p ../../examples/echo -a echo -- 
+pintos -t run 'echo x'
 @end example
 
-The three final steps can actually be combined into a single command:
+You can also add the @code{-q} flag to the kernel, which will cause it
+to quit immediately after completing its task.
+
+The three final steps can actually be combined into a single command.
+Something like:
 
 @example
 pintos-mkdisk filesys.dsk --filesys-size=2
