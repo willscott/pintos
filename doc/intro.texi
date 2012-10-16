@@ -499,7 +499,7 @@ should be created as follows:
 @example
 cd ~/pintos
 cd src && make clean
-tar czf submission.tgz src
+tar --exclude=src/misc/bochs -cvzf submission.tgz src/
 @end example
 
 These commands can also be run via the script @code{src/misc/package.sh}.

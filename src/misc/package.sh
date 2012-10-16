@@ -2,4 +2,4 @@
 
 cd ~/pintos
 cd src && make clean
-tar czf submission.tgz src
+tar --exclude=src/misc/bochs -cvzf submission.tgz src/
