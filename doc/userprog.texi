@@ -705,6 +705,8 @@ Causes @var{newfd} to become a copy of @var{oldfd}.
 @var{oldfd} must be a valid file descriptor, and if the two descriptors
 have the same value then @code{dup2} has no effect. After a call to
 @code{dup2} the two file descriptors may be used interchangeably.
+You do not need to support dup2 support for file descriptors 0 and 1
+(stdin/stdout) unless you wish to.
 @end deftypefn
 
 @deftypefn {System Call} int pipe (int @code{pipefd[2]})
@@ -777,14 +779,16 @@ Opens the file called @var{file}.  Returns a nonnegative integer handle
 called a ``file descriptor'' (fd), or -1 if the file could not be
 opened.  
 
-File descriptors numbered 0 and 1 are reserved for the console: fd 0
+You are allowed to reserve File descriptors numbered 0 and 1 for the console: fd 0
 (@code{STDIN_FILENO}) is standard input, fd 1 (@code{STDOUT_FILENO}) is
-standard output.  The @code{open} system call will never return either
+standard output.  You may alternately allow dup2 to allow duplication of
+these descriptors.  The @code{open} system call should not return either
 of these file descriptors, which are valid as system call arguments only
 as explicitly described below.
 
 Each process has an independent set of file descriptors.  File
-descriptors are not inherited by child processes.
+descriptors should be copied to children processes created through
+fork().
 
 When a single file is opened more than once, whether by a single
 process or different processes, each @code{open} returns a new file
