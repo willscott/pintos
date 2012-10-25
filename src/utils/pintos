@@ -7,6 +7,7 @@ use File::Temp 'tempfile';
 use Getopt::Long qw(:config bundling);
 use Fcntl qw(SEEK_SET SEEK_CUR);
 
+
 # Read Pintos.pm from the same directory as this program.
 BEGIN { my $self = $0; $self =~ s%/+[^/]*$%%; require "$self/Pintos.pm"; }
 
@@ -571,7 +572,21 @@ EOF
         print BOCHSRC "pci: enabled=1, chipset=i440fx, slot2=e1000\n";
         print BOCHSRC "e1000: enabled=1, mac=fe:fd:00:00:00:01, ethmod=tuntap, ethdev=/dev/net/tun\n";
     }
-    print BOCHSRC "gdbstub: enabled=1\n" if $debug eq 'gdb';
+    
+    if ($debug eq 'gdb') {    
+        srand($>);                                    #Seed with UID
+        my $gdbport = int(rand(65535-1024)) + 1024;
+        print "**** **** gdbstub listening on port $gdbport **** ****\n";
+        if (! -e ".gdbport") {
+            sleep 3;
+            open (GDBPORT_FILE, ">", ".gdbport") or die ".gdbport: create: $!\n";
+            print GDBPORT_FILE "$gdbport";
+            close(GDBPORT_FILE);
+        }
+        print "This port should be consistent as long as your UID does not change.\n";
+        print "This port number is stored in the file .gdbport in this build directory.\n";
+        print BOCHSRC "gdbstub: enabled=1, port=$gdbport\n" if $debug eq 'gdb';
+    }
     print BOCHSRC "clock: sync=", $realtime ? 'realtime' : 'none',
       ", time0=0\n";
     print BOCHSRC "ata1: enabled=1, ioaddr1=0x170, ioaddr2=0x370, irq=15\n"
