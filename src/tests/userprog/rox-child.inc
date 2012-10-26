@@ -1,5 +1,8 @@
 /* -*- c -*- */
 
+// Rewrite this
+// Uses seek
+
 #include <syscall.h>
 #include "tests/lib.h"
 #include "tests/main.h"
@@ -9,7 +12,7 @@ test_main (void)
 {
   const char *child_cmd = "child-rox " CHILD_CNT;
   int handle;
-  pid_t child;
+  pid_t pid;
   char buffer[16];
 
   /* Open child-rox, read from it, write back same data. */
@@ -21,9 +24,14 @@ test_main (void)
          "write \"child-rox\"");
 
   /* Execute child-rox and wait for it. */
-  CHECK ((child = exec (child_cmd)) != -1, "exec \"%s\"", child_cmd);
+  pid = fork()
+  if (pid == 0) {
+    exec(child_cmd);
+  }
+    
+  CHECK (pid != -1, "exec \"%s\"", child_cmd);
   quiet = true;
-  CHECK (wait (child) == 12, "wait for child");
+  CHECK (wait (pid) == 12, "wait for child");
   quiet = false;
 
   /* Write to child-rox again. */

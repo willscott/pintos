@@ -7,5 +7,12 @@
 void
 test_main (void) 
 {
-  msg ("wait(exec()) = %d", wait (exec ("child-simple")));
+  pid_t pid = fork();
+  if (pid == 0) {
+    exec("child-simple");
+  }
+  else {
+    msg ("wait(exec()) = %d", wait (pid));
+  }
 }
+

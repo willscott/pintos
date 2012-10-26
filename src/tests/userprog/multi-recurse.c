@@ -22,7 +22,11 @@ main (int argc UNUSED, char *argv[])
       int code;
       
       snprintf (child_cmd, sizeof child_cmd, "multi-recurse %d", n - 1);
-      CHECK ((child_pid = exec (child_cmd)) != -1, "exec(\"%s\")", child_cmd);
+
+      child_pid = fork();
+      if (child_pid == 0) {
+        CHECK (exec (child_cmd) != -1, "exec(\"%s\")", child_cmd);
+      }
 
       code = wait (child_pid);
       if (code != n - 1)
