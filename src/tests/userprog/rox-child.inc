@@ -19,9 +19,11 @@ test_main (void)
   CHECK ((handle = open ("child-rox")) > 1, "open \"child-rox\"");
   CHECK (read (handle, buffer, sizeof buffer) == (int) sizeof buffer,
          "read \"child-rox\"");
-  seek (handle, 0);
+  close(handle);
+  CHECK ((handle = open ("child-rox")) > 1, "open \"child-rox\"");
   CHECK (write (handle, buffer, sizeof buffer) == (int) sizeof buffer,
          "write \"child-rox\"");
+  close(handle);
 
   /* Execute child-rox and wait for it. */
   pid = fork()
@@ -35,7 +37,7 @@ test_main (void)
   quiet = false;
 
   /* Write to child-rox again. */
-  seek (handle, 0);
+  CHECK ((handle = open ("child-rox")) > 1, "open \"child-rox\"");
   CHECK (write (handle, buffer, sizeof buffer) == (int) sizeof buffer,
          "write \"child-rox\"");
 }
