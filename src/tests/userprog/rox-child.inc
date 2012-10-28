@@ -26,7 +26,7 @@ test_main (void)
   close(handle);
 
   /* Execute child-rox and wait for it. */
-  pid = fork()
+  pid = fork();
   if (pid == 0) {
     exec(child_cmd);
   }
