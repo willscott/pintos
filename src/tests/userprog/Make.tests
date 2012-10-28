@@ -7,7 +7,7 @@ tests/userprog_TESTS = $(addprefix tests/userprog/,args-none		\
 args-single args-multiple args-many args-dbl-space sc-bad-sp		\
 sc-bad-arg sc-boundary sc-boundary-2 halt exit create-normal		\
 create-empty create-null create-bad-ptr create-long create-exists	\
-create-bound open-normal open-missing open-boundary open-empty		\
+create-bound forktree open-normal open-missing open-boundary open-empty		\
 open-null open-bad-ptr open-twice close-normal close-twice close-stdin	\
 close-stdout close-bad-fd read-normal read-bad-ptr read-boundary	\
 read-zero read-stdout read-bad-fd write-normal write-bad-ptr		\
@@ -47,6 +47,7 @@ tests/main.c
 tests/userprog/create-long_SRC = tests/userprog/create-long.c tests/main.c
 tests/userprog/create-exists_SRC = tests/userprog/create-exists.c tests/main.c
 tests/userprog/create-bound_SRC = tests/userprog/create-bound.c	\
+tests/userprog/forktree_SRC = tests/userprog/forktree.c	\
 tests/userprog/boundary.c tests/main.c
 tests/userprog/open-normal_SRC = tests/userprog/open-normal.c tests/main.c
 tests/userprog/open-missing_SRC = tests/userprog/open-missing.c tests/main.c
