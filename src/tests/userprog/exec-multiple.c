@@ -7,8 +7,20 @@
 void
 test_main (void) 
 {
-  wait (exec ("child-simple"));
-  wait (exec ("child-simple"));
-  wait (exec ("child-simple"));
-  wait (exec ("child-simple"));
+  int i;
+  int pids[4];
+  int pid;
+  for (i=0; i<4; i++) {
+      pid = fork();
+      if (pid == 0) {
+          exec("child-simple");
+      }
+      else {
+          pids[i] = pid;
+      }
+
+  }
+  for (i=0; i<4; i++) {
+      wait(pids[i]);
+  }
 }

@@ -3,6 +3,7 @@
 # Path to GDB macros file.  Customize for your site.
 HERE=$(cd $(dirname "$0"); pwd)
 GDBMACROS=$HERE/../misc/gdb-macros
+PORT=$(cat ~/.gdbport)
 
 # Choose correct GDB.
 if command -v i386-elf-gdb >/dev/null 2>&1; then
@@ -13,7 +14,7 @@ fi
 
 # Run GDB.
 if test -f "$GDBMACROS"; then
-	exec $GDB -x "$GDBMACROS" "$@"
+	exec $GDB -x "$GDBMACROS" -ex "pintosport $PORT" "$@"
 else
 	echo "*** $GDBMACROS does not exist ***"
 	echo "*** Pintos GDB macros will not be available ***"
