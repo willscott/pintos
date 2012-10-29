@@ -581,7 +581,7 @@ EOF
         print GDBPORT_FILE "$gdbport";
         close(GDBPORT_FILE);
         print "This port should be consistent as long as your UID does not change.\n";
-        print "This port number is stored in the file .gdbport in this build directory.\n";
+        print "This port number is stored in the file .gdbport in your home directory.\n";
         print BOCHSRC "gdbstub: enabled=1, port=$gdbport\n" if $debug eq 'gdb';
     }
     print BOCHSRC "clock: sync=", $realtime ? 'realtime' : 'none',
