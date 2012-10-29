@@ -3,6 +3,9 @@
 #include <syscall.h>
 #include "tests/lib.h"
 #include "tests/main.h"
+#include <stdio.h>
+
+const char *test_name = "forktree";
 
 void 
 main (void)
