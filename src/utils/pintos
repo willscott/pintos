@@ -577,12 +577,9 @@ EOF
         srand($>);                                    #Seed with UID
         my $gdbport = int(rand(65535-1024)) + 1024;
         print "**** **** gdbstub listening on port $gdbport **** ****\n";
-        if (! -e ".gdbport") {
-            sleep 3;
-            open (GDBPORT_FILE, ">", ".gdbport") or die ".gdbport: create: $!\n";
-            print GDBPORT_FILE "$gdbport";
-            close(GDBPORT_FILE);
-        }
+        open (GDBPORT_FILE, ">", $ENV{"HOME"} . "/.gdbport") or die ".gdbport: create: $!\n";
+        print GDBPORT_FILE "$gdbport";
+        close(GDBPORT_FILE);
         print "This port should be consistent as long as your UID does not change.\n";
         print "This port number is stored in the file .gdbport in this build directory.\n";
         print BOCHSRC "gdbstub: enabled=1, port=$gdbport\n" if $debug eq 'gdb';

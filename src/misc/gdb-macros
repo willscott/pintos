@@ -133,8 +133,12 @@ document loadusersymbols
 end
 
 define debugpintos
-    target remote localhost:1234
+    eval "target remote localhost:%d", $pintosport
 end
 document debugpintos
     Attach debugger to pintos process
+end
+
+define pintosport
+    set $pintosport = $arg0
 end
