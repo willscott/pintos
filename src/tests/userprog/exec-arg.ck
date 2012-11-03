@@ -11,7 +11,5 @@ check_expected ([<<'EOF']);
 (args) argv[2] = null
 (args) end
 child-args: exit(0)
-(exec-arg) end
-exec-arg: exit(0)
 EOF
 pass;
