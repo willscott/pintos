@@ -1,0 +1,29 @@
+
+/*
+ * Your implementation of fork should look something like this.
+ *
+ * */
+static pid_t
+syscall_fork(struct intr_frame* f) {    
+  struct thread* new_thread = create_child_thread();
+  
+  /* Do any child/parent setup, copy file descriptors, etc.
+   * This is all dependent on your implementation of those details. */
+
+  /* Set up the stack of your child process to return to the right place */
+  setup_thread_to_return_from_fork(new_thread, f);
+  
+  /* Copy the paretn's page directory */
+  
+  new_pagedir = pagedir_duplicate(thread_current->pagedir);
+  /* Handle error conditions properly */
+
+  /* Add new thread to the ready queue - it will start executing by returning
+   * via 
+   *
+   * */
+  thread_unblock(new_thread);
+
+  /* Parent returns child's pid */
+  return new_thread->tid;
+}
