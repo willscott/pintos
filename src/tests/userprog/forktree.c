@@ -5,7 +5,7 @@
 #include "tests/main.h"
 
 void 
-main (void)
+test_main (void)
 {
     int depth = 3;
     int total = 0;
