@@ -44,8 +44,8 @@ main (int argc UNUSED, char *argv[])
       snprintf (cmd, sizeof cmd, "child-rox %d", atoi (argv[1]) - 1);
 			child = fork();
 			if (child == 0) {
-				exec (cmd)
-					fail ("child execution failed");
+				exec (cmd);
+				fail ("child execution failed");
 			} else {
 				CHECK (true, "exec \"%s\"", cmd);
 			}
