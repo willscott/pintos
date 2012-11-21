@@ -32,7 +32,7 @@ tests/userprog/bad-jump_SRC = tests/userprog/bad-jump.c tests/main.c
 tests/userprog/bad-read2_SRC = tests/userprog/bad-read2.c tests/main.c
 tests/userprog/bad-write2_SRC = tests/userprog/bad-write2.c tests/main.c
 tests/userprog/bad-jump2_SRC = tests/userprog/bad-jump2.c tests/main.c
-tests/userprog/forktree_SRC = tests/userprog/forktree.c
+tests/userprog/forktree_SRC = tests/userprog/forktree.c tests/main.c
 tests/userprog/sc-boundary_SRC = tests/userprog/sc-boundary.c	\
 tests/userprog/boundary.c tests/main.c
 tests/userprog/sc-boundary-2_SRC = tests/userprog/sc-boundary-2.c	\
