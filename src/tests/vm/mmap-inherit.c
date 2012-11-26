@@ -21,7 +21,13 @@ test_main (void)
     fail ("read of mmap'd file reported bad data");
 
   /* Spawn child and wait. */
-  CHECK ((child = exec ("child-inherit")) != -1, "exec \"child-inherit\"");
+	child = fork();
+	if (child == 0) {
+		exec ("child-inherit");
+		fail("Exec Failed!");
+	} else {
+		CHECK(true, "exec \"child-inherit\"");
+	}
   quiet = true;
   CHECK (wait (child) == -1, "wait for child (should return -1)");
   quiet = false;

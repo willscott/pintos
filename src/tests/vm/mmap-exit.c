@@ -13,7 +13,13 @@ test_main (void)
 
   /* Make child write file. */
   quiet = true;
-  CHECK ((child = exec ("child-mm-wrt")) != -1, "exec \"child-mm-wrt\"");
+	child = fork();
+	if (child == 0) {
+		exec ("child-mm-wrt");
+		fail("Exec Failed!");
+	} else {
+		CHECK(true, "exec \"child-mm-wrt\"");
+	}
   CHECK (wait (child) == 0, "wait for child (should return 0)");
   quiet = false;
 

@@ -59,7 +59,13 @@ sort_chunks (const char *subprocess, int exit_status)
 
       /* Sort with subprocess. */
       snprintf (cmd, sizeof cmd, "%s %s", subprocess, fn);
-      CHECK ((children[i] = exec (cmd)) != -1, "exec \"%s\"", cmd);
+			children[i] = fork();
+			if (children[i] == 0) {
+				exec (cmd);
+				fail("Exec Failed!");
+			} else {
+				CHECK(true, "exec \"%s\"", cmd);
+			}
       quiet = false;
     }
 
