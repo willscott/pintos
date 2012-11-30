@@ -492,6 +492,7 @@ partition, how to implement paging, etc.
 
 @menu
 * Project 3 Design Document::   
+* System Call Completion::
 * Paging::                      
 * Stack Growth::                
 * Memory Mapped Files::         
@@ -506,6 +507,16 @@ project 3 design document template} into your source tree under the name
 read the design document template before you start working on the
 project.  @xref{Project Documentation}, for a sample design document
 that goes along with a fictitious project.
+
+@node System Call Completion
+@subsection System Call Completion
+
+You will need to implement the @code{create} and @code{remove} system
+calls to successfully run the pintos 3 tests. These system calls should
+require minimal work given your previous file system calls from the
+previous assignment.  More specifically, they should grab the file system
+lock, call the underlying file system create / remove methods, and handle
+appropriate accounting of file descriptors.
 
 @node Paging
 @subsection Paging
