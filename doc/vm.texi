@@ -519,7 +519,7 @@ swap because they can always be read back from the executable.
 
 Implement a global page replacement algorithm that approximates LRU.
 Your algorithm should perform at least as well as the simple variant
-of the ``second chance'' or ``clock'' algorithm.
+of the ``clock'' algorithm or random evictions.
 
 Your design should allow for parallelism.  If one page fault requires
 I/O, in the meantime processes that do not fault should continue
